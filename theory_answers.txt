@@ -1,0 +1,39 @@
+Assignment 2: Keys, Addresses, and Wallets
+------------------------------------------
+
+1. What is the difference between hardened and non-hardened keys?
+
+Both are security features of Hierarchical Deterministic (HD) wallets (BIP-32) that determine whether a parent public key can derive a child public key.
+
+🔹 **Non-Hardened Derivation (Normal):**
+- **Notation:** Uses a standard integer path (e.g., /0/1)
+- **Key Use:** Derives child public keys from a parent public key and a chain code
+- **Security Implication:** Less secure — if an attacker obtains the Extended Public Key (xpub) *and* a single child private key, they can work backward to compromise the parent private key, exposing all other non-hardened child keys
+- **Typical Use:** Used for address branches (receiving/change addresses) where the parent xpub might be shared with an insecure server for monitoring balances
+
+🔹 **Hardened Derivation:**
+- **Notation:** Uses a prime tick mark (') in the path (e.g., /0'/1')
+- **Key Use:** Requires the parent private key to derive the child key pair
+- **Security Implication:** More secure — a compromised child private key cannot be used to compromise the parent or sibling private keys
+- **Typical Use:** Used for account and purpose branches (e.g., m/44'/0'/0') to segment the wallet and protect major parts of the key tree
+
+
+2. Why should a wallet developer prefer deterministic wallets over non-deterministic wallets?
+
+Deterministic Wallets (HD Wallets — BIP-32/39/44) are preferred over Non-Deterministic Wallets (JBOK wallets) due to their superior backup, key management, and privacy.
+
+🔹 **Backup:**
+- *Deterministic Wallet (HD Wallet):* Requires only a single backup of the Master Seed (Mnemonic Phrase, 12–24 words) to restore the entire wallet and all future keys.
+- *Non-Deterministic Wallet (JBOK):* Each private key is generated independently, requiring a backup for every single key — unmanageable for frequent use.
+
+🔹 **Key Organization:**
+- *Deterministic Wallet:* Keys are organized hierarchically (accounts, chains, addresses), supporting easier management and multi-currency compatibility.
+- *Non-Deterministic Wallet:* Keys are a flat, random list without logical relationships.
+
+🔹 **Privacy:**
+- *Deterministic Wallet:* Generates a new address for every transaction automatically, improving privacy and preventing address reuse.
+- *Non-Deterministic Wallet:* Users often reuse addresses, compromising privacy.
+
+🔹 **“Watch-Only” Feature:**
+- *Deterministic Wallet:* Supports extended public keys (xpubs) that allow third parties to monitor balances without spending authority.
+- *Non-Deterministic Wallet:* No master key structure to support this functionality.
